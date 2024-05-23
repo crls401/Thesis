@@ -1,0 +1,22 @@
+# Initialize vectors to store MAE values
+MAE$base <- numeric(length(unique(data$micro_index)))
+MAE$new <- numeric(length(unique(data$micro_index)))
+
+# Loop through unique micro_index values
+unique_indices <- unique(data$micro_index)
+for (i in unique_indices) {
+  # Calculate MAE using base R
+  actual_base <- data$dengue_cases[data$micro_index == i]
+  predicted_base <- data$base.fit[data$micro_index == i]
+  MAE$base[i] <- mean(abs(actual_base - predicted_base), na.rm = TRUE)
+  
+  # Calculate MAE using 'Metrics' package
+  actual_new <- data$dengue_cases[data$micro_index == i]
+  predicted_new <- data$fit[data$micro_index == i]
+  MAE$new[i] <- mae(actual_new, predicted_new)
+  
+  # Calculate MAE using 'caret' package
+  actual_new <- data$dengue_cases[data$micro_index == i]
+  predicted_new <- data$fit[data$micro_index == i]
+  MAE$new[i] <- MAE(actual_new, predicted_new)
+}
